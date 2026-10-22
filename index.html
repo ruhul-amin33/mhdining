@@ -84,8 +84,8 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:0 0 24px}
    <h2>💳 Payment করুন</h2>
    <div id="nums"></div>
    <div class="stats">
-    <div class="st"><b id="minAmt">—</b><span>Minimum (৳)</span></div>
-    <div class="st"><b id="minDays">—</b><span>Minimum দিন</span></div>
+    <div class="st"><b id="minAmt">—</b><span>প্রতি Cycle (৳)</span></div>
+    <div class="st"><b id="minDays">—</b><span>Cycle (দিন)</span></div>
     <div class="st"><b id="rate">—</b><span>প্রতি দিন (৳, বিল সহ)</span></div>
    </div>
   </section>
@@ -98,6 +98,14 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:0 0 24px}
   <input id="lq" placeholder="নাম / Batch / Dept / Room খুঁজুন" style="margin-top:12px" oninput="renderList()">
   <div class="tw" style="margin-top:8px"><table><thead><tr><th>নাম</th><th>Batch</th><th>Dept</th><th>Room</th><th>Paid দিন</th><th>বাকি</th><th>Meal</th></tr></thead><tbody id="dl"></tbody></table></div>
   <div class="hint">Payment approve হওয়ার পর থেকে paid দিন পর্যন্ত meal ON থাকে। দিন শেষ হলে বা payment না দিলে OFF।</div>
+ </section>
+
+ <section class="card hide" id="dlPub">
+  <h2>🍽️ Dining List — কার Meal ON / OFF</h2>
+  <div class="stats"><div class="st"><b id="cOn2" style="color:var(--ok)">0</b><span>Meal ON</span></div><div class="st"><b id="cOff2" style="color:var(--er)">0</b><span>Meal OFF</span></div><div class="st"><b id="cAll2">0</b><span>মোট</span></div></div>
+  <input id="plq" placeholder="নাম / Batch / Dept / Room খুঁজুন" style="margin-top:12px" oninput="renderPub()">
+  <div class="tw" style="margin-top:8px"><table><thead><tr><th>নাম</th><th>Batch</th><th>Dept</th><th>Room</th><th>Paid দিন</th><th>বাকি</th><th>Meal</th></tr></thead><tbody id="pl"></tbody></table></div>
+  <div class="hint">টাকার পরিমাণ ও bKash/Nagad নম্বর গোপন রাখা হয়। প্রতি cycle ১৫ দিন।</div>
  </section>
 
  <section class="card">
@@ -147,10 +155,11 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:0 0 24px}
    <div><label>Nagad নম্বর</label><input id="sNg"></div>
   </div>
   <div class="two">
-   <div><label>Minimum amount (৳)</label><input id="sMinA" type="number"></div>
-   <div><label>Minimum দিন</label><input id="sMinD" type="number"></div>
+   <div><label>প্রতি cycle-এর টাকা (৳)</label><input id="sMinA" type="number"></div>
+   <div><label>Cycle কত দিন</label><input id="sMinD" type="number"></div>
   </div>
   <label>প্রতি দিনের মিল রেট (৳, খাবারের বিল সহ)</label><input id="sRate" type="number">
+  <label style="display:flex;gap:8px;align-items:center;margin-top:14px"><input type="checkbox" id="sShow" style="width:auto"> Dining List সবাইকে দেখাও (টাকা ও নম্বর গোপন থাকবে)</label>
   <label>নতুন Manager Password (বদলাতে চাইলে, কমপক্ষে ৪ অক্ষর)</label><input id="sPw" type="password" autocomplete="new-password">
   <button class="btn" style="margin-top:12px" onclick="saveSettings()">Settings সেভ</button>
 
@@ -171,8 +180,8 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:0 0 24px}
 <script>
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const DEF={name:'Manager নাম',phone:'',start:new Date().toISOString().slice(0,10),days:30,bkash:'01XXXXXXXXX',nagad:'01XXXXXXXXX',minAmt:1350,minDays:15,rate:90};
-let S={...DEF},N=[],P=[],MY=[],isAdmin=false,PW='';
+const DEF={name:'Manager নাম',phone:'',start:new Date().toISOString().slice(0,10),days:30,bkash:'01XXXXXXXXX',nagad:'01XXXXXXXXX',minAmt:1350,minDays:15,rate:90,showList:false};
+let MEM=[];let S={...DEF},N=[],P=[],MY=[],isAdmin=false,PW='';
 const norm=s=>String(s||'').replace(/[\s-]/g,'').replace(/^\+?88/,'').toLowerCase();
 async function api(action,data={}){
   if(!window.API_URL||API_URL.includes('PASTE'))throw new Error('config.js এ API_URL বসানো হয়নি');
@@ -180,10 +189,10 @@ async function api(action,data={}){
   const j=await r.json();if(j.error)throw new Error(j.error);return j;
 }
 async function loadPublic(){
-  try{const j=await api('public');S={...DEF,...j.settings};N=j.notices;render()}
+  try{const j=await api('public');S={...DEF,...j.settings};N=j.notices;render();if(S.showList){MEM=(await api('list')).members;renderPub()}}
   catch(e){$('apiBar').textContent='⚠️ '+e.message;$('apiBar').classList.remove('hide')}
 }
-async function loadAdmin(){const j=await api('adminData');S={...DEF,...j.settings};N=j.notices;P=j.payments;render()}
+async function loadAdmin(){const j=await api('adminData');S={...DEF,...j.settings};N=j.notices;P=j.payments;if(S.showList)MEM=(await api('list')).members;render()}
 const day0=d=>{d=new Date(d);d.setHours(0,0,0,0);return d};
 function cover(list){
   const ap=list.filter(p=>p.status=='approved'),rate=Number(S.rate)||1;
@@ -197,13 +206,14 @@ function cover(list){
 function render(){
   const end=new Date(S.start+'T00:00');end.setDate(end.getDate()+Number(S.days||30));
   const left=Math.max(0,Math.ceil((end-new Date())/864e5));
+  $('dlPub').classList.toggle('hide',!S.showList);renderPub();
   $('mName').textContent=S.name;$('mLeft').textContent=left;
   $('mEnd').textContent=end.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
   $('mPhone').textContent=S.phone?'📞 '+S.phone:'';
   $('minAmt').textContent=S.minAmt;$('minDays').textContent=S.minDays;$('rate').textContent=S.rate;
   $('nums').innerHTML=[['bKash','bk',S.bkash],['Nagad','ng',S.nagad]].map(([n,c,v])=>
    `<div class="pay"><div><span class="tag ${c}">${n}</span><div class="n">${esc(v)}</div><small>Send Money করুন</small></div><button class="btn o s" onclick="copyNum('${esc(v)}',this)">Copy</button></div>`).join('');
-  $('fHint').textContent=`Minimum ৳${S.minAmt} (কমপক্ষে ${S.minDays} দিনের মিল) জমা দিতে হবে।`;
+  $('fHint').textContent=`প্রতি cycle ${S.minDays} দিন = ৳${S.minAmt}। ২ cycle হলে ৳${S.minAmt*2} — এভাবে জমা দিন।`;
   $('notices').innerHTML=N.length?N.map(n=>`<div class="notice ${n.pin?'p':''}"><b>${n.pin?'🔴 ':''}${esc(n.title)}</b>${esc(n.body)}<small>${new Date(n.ts).toLocaleDateString('en-GB')}</small>${isAdmin?` <button class="btn r s" onclick="delNotice('${n.id}')">মুছুন</button>`:''}</div>`).join(''):'<div class="hint">কোনো নোটিশ নেই।</div>';
   if(isAdmin){
     $('pays').innerHTML=P.map(p=>`<tr><td>${esc(p.name)}</td><td>${esc(p.batch)}</td><td>${esc(p.dept)}</td><td>${esc(p.room)}</td><td>${esc(p.method)}</td><td>${esc(p.amount)}</td><td>${esc(p.trx)}</td><td>${esc(p.from)}</td><td style="white-space:normal;min-width:120px">${esc(p.note)}</td><td><span class="pill ${p.status}">${p.status}</span></td><td>${p.status!='approved'?`<button class="btn s" onclick="setStatus('${p.id}','approved')">✓</button> `:''}${p.status!='rejected'?`<button class="btn r s" onclick="setStatus('${p.id}','rejected')">✕</button>`:''}</td></tr>`).join('')||'<tr><td colspan="11" class="hint">এখনো কোনো payment নেই</td></tr>';
@@ -222,6 +232,12 @@ function renderList(){
   const q=($('lq')?.value||'').toLowerCase();
   rows=rows.filter(r=>!q||[r.m.name,r.m.batch,r.m.dept,r.m.room].join(' ').toLowerCase().includes(q));
   $('dl').innerHTML=rows.map(r=>`<tr><td>${esc(r.m.name)}</td><td>${esc(r.m.batch)}</td><td>${esc(r.m.dept)}</td><td>${esc(r.m.room)}</td><td>${r.c.pd}</td><td>${r.c.left}</td><td><span class="pill ${r.c.on?'approved':'rejected'}">${r.c.on?'ON':'OFF'}</span>${r.c.on?(r.c.left<=2?` <span class="pill pending">${r.c.left} দিন বাকি</span>`:''):(r.pend?' <span class="pill pending">verify হচ্ছে</span>':(r.c.pd?' <span class="pill rejected">⚠️ Payment বাকি</span>':''))}</td></tr>`).join('')||'<tr><td colspan="7" class="hint">এখনো কেউ নেই</td></tr>';
+}
+function renderPub(){
+  const all=MEM,q=($('plq')?.value||'').toLowerCase();
+  $('cOn2').textContent=all.filter(r=>r.on).length;$('cOff2').textContent=all.filter(r=>!r.on).length;$('cAll2').textContent=all.length;
+  const rows=all.filter(r=>!q||[r.name,r.batch,r.dept,r.room].join(' ').toLowerCase().includes(q));
+  $('pl').innerHTML=rows.map(r=>`<tr><td>${esc(r.name)}</td><td>${esc(r.batch)}</td><td>${esc(r.dept)}</td><td>${esc(r.room)}</td><td>${r.pd}</td><td>${r.left}</td><td><span class="pill ${r.on?'approved':'rejected'}">${r.on?'ON':'OFF'}</span>${r.on?(r.left<=2?` <span class="pill pending">${r.left} দিন বাকি</span>`:''):(r.pend?' <span class="pill pending">verify হচ্ছে</span>':(r.pd?' <span class="pill rejected">⚠️ Payment বাকি</span>':''))}</td></tr>`).join('')||'<tr><td colspan="7" class="hint">এখনো কেউ নেই</td></tr>';
 }
 /* ---- student login (number / trx id) ---- */
 async function lookup(){
@@ -247,7 +263,7 @@ function logout(){try{localStorage.removeItem('zh_q')}catch{}MY=[];$('qIn').valu
 async function submitPay(){
   const m=$('fMsg'),g=id=>$(id).value.trim();
   const o={name:g('fName'),batch:g('fBatch'),dept:g('fDept'),room:g('fRoom'),method:$('fMethod').value,amount:+g('fAmt'),from:g('fFrom'),trx:g('fTrx'),note:g('fNote')};
-  const err=!o.name||!o.batch||!o.dept||!o.room?'নাম, Batch, Dept ও MH-Room নং দিন।':o.amount<S.minAmt?`Minimum ৳${S.minAmt} দিতে হবে।`:(!o.trx&&!o.from)?'Transaction ID অথবা bKash/Nagad নম্বর দিন।':'';
+  const err=!o.name||!o.batch||!o.dept||!o.room?'নাম, Batch, Dept ও MH-Room নং দিন।':(!(o.amount>=S.minAmt)||(S.minAmt>0&&o.amount%S.minAmt))?`প্রতি cycle ৳${S.minAmt} (${S.minDays} দিন)। ২ cycle হলে ৳${S.minAmt*2}।`:(!o.trx&&!o.from)?'Transaction ID অথবা bKash/Nagad নম্বর দিন।':'';
   if(err){m.className='msg er';m.textContent=err;return}
   m.className='msg ok';m.textContent='জমা হচ্ছে…';
   try{await api('submit',{p:o});m.textContent='✓ জমা হয়েছে! Manager যাচাই করে approve করবেন।';
@@ -265,12 +281,12 @@ async function toggleAdmin(){
 }
 function fillAdmin(){
   $('sName').value=S.name;$('sPhone').value=S.phone;$('sStart').value=S.start;$('sDays').value=S.days;
-  $('sBk').value=S.bkash;$('sNg').value=S.nagad;$('sMinA').value=S.minAmt;$('sMinD').value=S.minDays;$('sRate').value=S.rate;
+  $('sBk').value=S.bkash;$('sNg').value=S.nagad;$('sMinA').value=S.minAmt;$('sMinD').value=S.minDays;$('sRate').value=S.rate;$('sShow').checked=!!S.showList;
 }
 async function saveSettings(){
   const o={name:$('sName').value.trim()||DEF.name,phone:$('sPhone').value.trim(),start:$('sStart').value||DEF.start,days:+$('sDays').value||30,
-   bkash:$('sBk').value.trim(),nagad:$('sNg').value.trim(),minAmt:+$('sMinA').value||0,minDays:+$('sMinD').value||0,rate:+$('sRate').value||0};
-  try{const np=$('sPw').value;await api('saveSettings',{settings:o,newPw:np});if(np&&np.length>=4)PW=np;$('sPw').value='';S=o;render();alert('Settings সেভ হয়েছে ✓')}catch(e){alert(e.message)}
+   bkash:$('sBk').value.trim(),nagad:$('sNg').value.trim(),minAmt:+$('sMinA').value||0,minDays:+$('sMinD').value||0,rate:+$('sRate').value||0,showList:$('sShow').checked};
+  try{const np=$('sPw').value;await api('saveSettings',{settings:o,newPw:np});if(np&&np.length>=4)PW=np;$('sPw').value='';S=o;MEM=S.showList?(await api('list')).members:[];render();alert('Settings সেভ হয়েছে ✓')}catch(e){alert(e.message)}
 }
 async function addNotice(){
   const t=$('nTitle').value.trim();if(!t)return;
