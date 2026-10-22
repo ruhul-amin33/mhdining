@@ -49,6 +49,7 @@ th,td{padding:8px;text-align:left;border-bottom:1px solid var(--bd);white-space:
 .pill{padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700}
 .pending{background:#e8a3171f;color:#9a6a00}.approved{background:#12805c1f;color:var(--ok)}.rejected{background:#c0392b1f;color:var(--er)}
 .hide{display:none!important}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.sp{background:var(--bg);border-radius:12px;padding:12px;font-size:14px}.sp b{display:block;color:var(--pri);margin-bottom:2px}@media(max-width:720px){.steps{grid-template-columns:1fr}}
 footer{text-align:center;color:var(--mut);font-size:12px;padding:0 0 24px}
 </style>
 </head>
@@ -66,6 +67,11 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:0 0 24px}
  <div class="bar hide" id="apiBar"></div>
 
  <section class="card">
+  <h2>📌 কীভাবে Meal চালু করবেন?</h2>
+  <div class="steps"><div class="sp"><b>① টাকা পাঠান</b>নিচের bKash/Nagad নম্বরে Send Money করুন (১ cycle = ১৫ দিন)</div><div class="sp"><b>② ফর্ম পূরণ করুন</b>আপনার তথ্য ও Transaction ID দিয়ে জমা দিন</div><div class="sp"><b>③ Manager approve করবেন</b>তারপর আপনার Meal ON হবে। নিচে নম্বর/Trx ID দিয়ে দেখে নিন</div></div>
+ </section>
+
+ <section class="card">
   <h2>👤 Current Manager</h2>
   <div class="stats">
    <div class="st"><b id="mName">—</b><span>Manager</span></div>
@@ -81,7 +87,7 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:0 0 24px}
    <div id="notices"><div class="hint">কোনো নোটিশ নেই।</div></div>
   </section>
   <section class="card">
-   <h2>💳 Payment করুন</h2>
+   <h2>① টাকা পাঠান (Send Money)</h2>
    <div id="nums"></div>
    <div class="stats">
     <div class="st"><b id="minAmt">—</b><span>প্রতি Cycle (৳)</span></div>
@@ -109,9 +115,9 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:0 0 24px}
  </section>
 
  <section class="card">
-  <h2>🧾 Payment Proof জমা দিন</h2>
+  <h2>② তথ্য দিয়ে জমা দিন</h2>
   <div class="two">
-   <div><label>Reference নাম</label><input id="fName" placeholder="আপনার পুরো নাম"></div>
+   <div><label>আপনার নাম</label><input id="fName" placeholder="আপনার পুরো নাম"></div>
    <div><label>Batch</label><input id="fBatch" placeholder="যেমন: 24th"></div>
   </div>
   <div class="two">
@@ -120,7 +126,7 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:0 0 24px}
   </div>
   <div class="two">
    <div><label>Method</label><select id="fMethod"><option>bKash</option><option>Nagad</option></select></div>
-   <div><label>Amount (৳)</label><input id="fAmt" type="number" inputmode="numeric" min="0"></div>
+   <div><label>কত cycle-এর টাকা পাঠিয়েছেন?</label><select id="fAmt"></select></div>
   </div>
   <div class="two">
    <div><label>Sender নম্বর <small style="font-weight:400">(যেকোনো একটি দিলেই হবে)</small></label><input id="fFrom" inputmode="tel" placeholder="01XXXXXXXXX"></div>
@@ -134,7 +140,7 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:0 0 24px}
  </section>
 
  <section class="card">
-  <h2>🔐 Login — আমার Meal Status</h2>
+  <h2>③ আমার Meal ON / OFF দেখুন</h2>
   <div class="hint" style="margin:0 0 8px">যে bKash/Nagad নম্বর দিয়ে payment করেছেন সেই নম্বর অথবা Transaction ID দিয়ে Login করুন। শুধু আপনার নিজের তথ্য দেখানো হবে।</div>
   <div style="display:flex;gap:8px"><input id="qIn" placeholder="01XXXXXXXXX বা Trx ID" onkeydown="if(event.key=='Enter')lookup()"><button class="btn" onclick="lookup()">Login</button><button class="btn o hide" id="outBtn" onclick="logout()">Logout</button></div>
   <div id="qOut"></div>
@@ -158,7 +164,7 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:0 0 24px}
    <div><label>প্রতি cycle-এর টাকা (৳)</label><input id="sMinA" type="number"></div>
    <div><label>Cycle কত দিন</label><input id="sMinD" type="number"></div>
   </div>
-  <label>প্রতি দিনের মিল রেট (৳, খাবারের বিল সহ)</label><input id="sRate" type="number">
+  <div class="hint">প্রতি দিনের রেট নিজে থেকেই হিসাব হয় (টাকা ÷ দিন)।</div>
   <label style="display:flex;gap:8px;align-items:center;margin-top:14px"><input type="checkbox" id="sShow" style="width:auto"> Dining List সবাইকে দেখাও (টাকা ও নম্বর গোপন থাকবে)</label>
   <label>নতুন Manager Password (বদলাতে চাইলে, কমপক্ষে ৪ অক্ষর)</label><input id="sPw" type="password" autocomplete="new-password">
   <button class="btn" style="margin-top:12px" onclick="saveSettings()">Settings সেভ</button>
@@ -188,11 +194,13 @@ async function api(action,data={}){
   const r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,pw:PW,...data})});
   const j=await r.json();if(j.error)throw new Error(j.error);return j;
 }
+async function listMembers(){try{return (await api('list')).members}catch{return[]}}
+function fillCycles(){const e=$('fAmt'),v=e.value;e.innerHTML=[1,2,3,4].map(i=>`<option value="${S.minAmt*i}">${i} cycle (${S.minDays*i} দিন) — ৳${S.minAmt*i}</option>`).join('');if(v)e.value=v}
 async function loadPublic(){
-  try{const j=await api('public');S={...DEF,...j.settings};N=j.notices;render();if(S.showList){MEM=(await api('list')).members;renderPub()}}
+  try{const j=await api('public');S={...DEF,...j.settings};N=j.notices;render();if(S.showList){MEM=(await listMembers());renderPub()}}
   catch(e){$('apiBar').textContent='⚠️ '+e.message;$('apiBar').classList.remove('hide')}
 }
-async function loadAdmin(){const j=await api('adminData');S={...DEF,...j.settings};N=j.notices;P=j.payments;if(S.showList)MEM=(await api('list')).members;render()}
+async function loadAdmin(){const j=await api('adminData');S={...DEF,...j.settings};N=j.notices;P=j.payments;if(S.showList)MEM=(await listMembers());render()}
 const day0=d=>{d=new Date(d);d.setHours(0,0,0,0);return d};
 function cover(list){
   const ap=list.filter(p=>p.status=='approved'),rate=Number(S.rate)||1;
@@ -210,10 +218,10 @@ function render(){
   $('mName').textContent=S.name;$('mLeft').textContent=left;
   $('mEnd').textContent=end.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
   $('mPhone').textContent=S.phone?'📞 '+S.phone:'';
-  $('minAmt').textContent=S.minAmt;$('minDays').textContent=S.minDays;$('rate').textContent=S.rate;
+  $('minAmt').textContent=S.minAmt;fillCycles();$('minDays').textContent=S.minDays;$('rate').textContent=S.rate;
   $('nums').innerHTML=[['bKash','bk',S.bkash],['Nagad','ng',S.nagad]].map(([n,c,v])=>
    `<div class="pay"><div><span class="tag ${c}">${n}</span><div class="n">${esc(v)}</div><small>Send Money করুন</small></div><button class="btn o s" onclick="copyNum('${esc(v)}',this)">Copy</button></div>`).join('');
-  $('fHint').textContent=`প্রতি cycle ${S.minDays} দিন = ৳${S.minAmt}। ২ cycle হলে ৳${S.minAmt*2} — এভাবে জমা দিন।`;
+  $('fHint').textContent=`১ cycle = ${S.minDays} দিন = ৳${S.minAmt}। টাকা পাঠিয়ে নিচের তথ্য দিন — Transaction ID অথবা আপনার bKash/Nagad নম্বর, যেকোনো একটি দিলেই হবে।`;
   $('notices').innerHTML=N.length?N.map(n=>`<div class="notice ${n.pin?'p':''}"><b>${n.pin?'🔴 ':''}${esc(n.title)}</b>${esc(n.body)}<small>${new Date(n.ts).toLocaleDateString('en-GB')}</small>${isAdmin?` <button class="btn r s" onclick="delNotice('${n.id}')">মুছুন</button>`:''}</div>`).join(''):'<div class="hint">কোনো নোটিশ নেই।</div>';
   if(isAdmin){
     $('pays').innerHTML=P.map(p=>`<tr><td>${esc(p.name)}</td><td>${esc(p.batch)}</td><td>${esc(p.dept)}</td><td>${esc(p.room)}</td><td>${esc(p.method)}</td><td>${esc(p.amount)}</td><td>${esc(p.trx)}</td><td>${esc(p.from)}</td><td style="white-space:normal;min-width:120px">${esc(p.note)}</td><td><span class="pill ${p.status}">${p.status}</span></td><td>${p.status!='approved'?`<button class="btn s" onclick="setStatus('${p.id}','approved')">✓</button> `:''}${p.status!='rejected'?`<button class="btn r s" onclick="setStatus('${p.id}','rejected')">✕</button>`:''}</td></tr>`).join('')||'<tr><td colspan="11" class="hint">এখনো কোনো payment নেই</td></tr>';
@@ -267,7 +275,7 @@ async function submitPay(){
   if(err){m.className='msg er';m.textContent=err;return}
   m.className='msg ok';m.textContent='জমা হচ্ছে…';
   try{await api('submit',{p:o});m.textContent='✓ জমা হয়েছে! Manager যাচাই করে approve করবেন।';
-    $('qIn').value=o.trx||o.from;lookup();['fAmt','fFrom','fTrx','fNote'].forEach(i=>$(i).value='')}
+    $('qIn').value=o.trx||o.from;lookup();['fFrom','fTrx','fNote'].forEach(i=>$(i).value='')}
   catch(e){m.className='msg er';m.textContent=e.message}
 }
 /* ---- manager ---- */
@@ -281,12 +289,12 @@ async function toggleAdmin(){
 }
 function fillAdmin(){
   $('sName').value=S.name;$('sPhone').value=S.phone;$('sStart').value=S.start;$('sDays').value=S.days;
-  $('sBk').value=S.bkash;$('sNg').value=S.nagad;$('sMinA').value=S.minAmt;$('sMinD').value=S.minDays;$('sRate').value=S.rate;$('sShow').checked=!!S.showList;
+  $('sBk').value=S.bkash;$('sNg').value=S.nagad;$('sMinA').value=S.minAmt;$('sMinD').value=S.minDays;$('sShow').checked=!!S.showList;
 }
 async function saveSettings(){
   const o={name:$('sName').value.trim()||DEF.name,phone:$('sPhone').value.trim(),start:$('sStart').value||DEF.start,days:+$('sDays').value||30,
-   bkash:$('sBk').value.trim(),nagad:$('sNg').value.trim(),minAmt:+$('sMinA').value||0,minDays:+$('sMinD').value||0,rate:+$('sRate').value||0,showList:$('sShow').checked};
-  try{const np=$('sPw').value;await api('saveSettings',{settings:o,newPw:np});if(np&&np.length>=4)PW=np;$('sPw').value='';S=o;MEM=S.showList?(await api('list')).members:[];render();alert('Settings সেভ হয়েছে ✓')}catch(e){alert(e.message)}
+   bkash:$('sBk').value.trim(),nagad:$('sNg').value.trim(),minAmt:+$('sMinA').value||0,minDays:+$('sMinD').value||0,rate:Math.round((+$('sMinA').value||0)/(+$('sMinD').value||15)),showList:$('sShow').checked};
+  try{const np=$('sPw').value;await api('saveSettings',{settings:o,newPw:np});if(np&&np.length>=4)PW=np;$('sPw').value='';S=o;MEM=S.showList?(await listMembers()):[];render();alert('Settings সেভ হয়েছে ✓')}catch(e){alert(e.message)}
 }
 async function addNotice(){
   const t=$('nTitle').value.trim();if(!t)return;
