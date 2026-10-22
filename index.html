@@ -152,7 +152,7 @@ const norm=s=>String(s||'').replace(/[\s-]/g,'').replace(/^\+?88/,'').toLowerCas
 async function api(action,data={}){
   if(!window.API_URL||API_URL.includes('PASTE'))throw new Error('config.js এ API_URL বসানো হয়নি');
   const r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,pw:PW,...data})});
-  const j=await r.json();if(j.error)throw new Error(j.error);return j;
+  const j=await r.json();if(j.error)throw new Error(j.error=='unknown action'?'Backend পুরনো ভার্সনে আছে — Apps Script-এ Deploy → Manage deployments → ✏️ Edit → New version → Deploy করুন।':j.error);return j;
 }
 async function listMembers(){try{return (await api('list')).members}catch{return[]}}
 function methodUI(){
