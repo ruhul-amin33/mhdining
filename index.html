@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Muktijoddha Hall Dining</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f7f4;--card:#fff;--tx:#1d2a24;--mut:#66756d;--pri:#0f6b4f;--pri2:#0a4d39;--acc:#e8a317;--bd:#e1e7e2;--bk:#e2136e;--ng:#f26522;--ok:#12805c;--er:#c0392b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1512;--card:#17211c;--tx:#e8efe9;--mut:#93a39a;--pri:#2fb487;--pri2:#1c7c5c;--bd:#27352e}}
+:root[data-theme="dark"]{--bg:#0e1512;--card:#17211c;--tx:#e8efe9;--mut:#93a39a;--pri:#2fb487;--pri2:#1c7c5c;--bd:#27352e}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:'Hind Siliguri',system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.5}
+header{background:linear-gradient(135deg,var(--pri2),var(--pri));color:#fff;padding:28px 18px 64px}
+.w{max-width:960px;margin:0 auto}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px}
+.logo i{font-style:normal;background:#ffffff26;border-radius:10px;width:40px;height:40px;display:grid;place-items:center;font-size:22px}
+.btn{border:0;border-radius:10px;padding:10px 16px;font:600 14px inherit;font-family:inherit;cursor:pointer;background:var(--pri);color:#fff}
+.btn.g{background:#ffffff26;color:#fff}.btn.o{background:transparent;color:var(--pri);border:1px solid var(--bd)}
+.btn.s{padding:6px 10px;font-size:12px}.btn.r{background:var(--er)}
+h1{margin:26px 0 4px;font-size:30px;line-height:1.2}
+header p{margin:0;opacity:.85}
+main{max-width:960px;margin:-44px auto 40px;padding:0 14px;display:grid;gap:16px}
+.row{display:grid;gap:16px;grid-template-columns:1fr 1fr}
+@media(max-width:720px){.row{grid-template-columns:1fr}h1{font-size:24px}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:18px;box-shadow:0 2px 10px #0000000a}
+.card h2{margin:0 0 12px;font-size:17px;display:flex;align-items:center;gap:8px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.st{background:var(--bg);border-radius:12px;padding:12px;text-align:center}
+.st b{display:block;font-size:20px;color:var(--pri)}.st span{font-size:12px;color:var(--mut)}
+.pay{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--bd);border-radius:12px;padding:12px;margin-bottom:10px}
+.pay .n{font-weight:700;font-size:17px;letter-spacing:.5px}.pay small{color:var(--mut);display:block}
+.tag{display:inline-block;color:#fff;border-radius:6px;padding:1px 8px;font-size:12px;font-weight:700}
+.bk{background:var(--bk)}.ng{background:var(--ng)}
+.notice{border-left:4px solid var(--acc);background:var(--bg);border-radius:0 10px 10px 0;padding:10px 12px;margin-bottom:10px}
+.notice.p{border-color:var(--er)}.notice b{display:block}.notice small{color:var(--mut)}
+label{display:block;font-size:13px;font-weight:600;margin:10px 0 4px}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--pri);border-color:transparent}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hint{font-size:12px;color:var(--mut);margin-top:4px}
+.msg{padding:10px 12px;border-radius:10px;margin-top:12px;font-size:14px;display:none}
+.msg.ok{display:block;background:#12805c1f;color:var(--ok)}.msg.er{display:block;background:#c0392b1f;color:var(--er)}
+.bar{background:#e8a3171f;color:#9a6a00;padding:8px 12px;border-radius:10px;font-size:13px}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px;text-align:left;border-bottom:1px solid var(--bd);white-space:nowrap}th{color:var(--mut);font-weight:600}
+.pill{padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700}
+.pending{background:#e8a3171f;color:#9a6a00}.approved{background:#12805c1f;color:var(--ok)}.rejected{background:#c0392b1f;color:var(--er)}
+.hide{display:none!important}
+footer{text-align:center;color:var(--mut);font-size:12px;padding:0 0 24px}
+</style>
+</head>
+<body>
+<header><div class="w">
+ <div class="top">
+  <div class="logo"><i>🍽️</i>Muktijoddha Hall Dining</div>
+  <button class="btn g s" id="adminBtn" onclick="toggleAdmin()">Manager Login</button>
+ </div>
+ <h1>ডাইনিং মিল পেমেন্ট পোর্টাল</h1>
+ <p>Meal payment &amp; notice board · Muktijoddha Hall</p>
+</div></header>
+
+<main>
+ <div class="bar hide" id="apiBar"></div>
+
+ <section class="card">
+  <h2>👤 Current Manager</h2>
+  <div class="stats">
+   <div class="st"><b id="mName">—</b><span>Manager</span></div>
+   <div class="st"><b id="mLeft">—</b><span>দিন বাকি (term)</span></div>
+   <div class="st"><b id="mEnd">—</b><span>Term শেষ</span></div>
+  </div>
+  <div class="hint" id="mPhone"></div>
+ </section>
+
+ <div class="row">
+  <section class="card">
+   <h2>📢 Notice Board</h2>
+   <div id="notices"><div class="hint">কোনো নোটিশ নেই।</div></div>
+  </section>
+  <section class="card">
+   <h2>💳 Payment করুন</h2>
+   <div id="nums"></div>
+   <div class="stats">
+    <div class="st"><b id="minAmt">—</b><span>Minimum (৳)</span></div>
+    <div class="st"><b id="minDays">—</b><span>Minimum দিন</span></div>
+    <div class="st"><b id="rate">—</b><span>প্রতি দিন (৳, বিল সহ)</span></div>
+   </div>
+  </section>
+ </div>
+
+ <section class="card hide" id="dlCard">
+  <h2>🍽️ Dining List (Manager)</h2>
+  <div id="warn"></div>
+  <div class="stats"><div class="st"><b id="cOn" style="color:var(--ok)">0</b><span>Meal ON</span></div><div class="st"><b id="cOff" style="color:var(--er)">0</b><span>Meal OFF</span></div><div class="st"><b id="cAll">0</b><span>মোট</span></div></div>
+  <input id="lq" placeholder="নাম / Batch / Dept / Room খুঁজুন" style="margin-top:12px" oninput="renderList()">
+  <div class="tw" style="margin-top:8px"><table><thead><tr><th>নাম</th><th>Batch</th><th>Dept</th><th>Room</th><th>Paid দিন</th><th>বাকি</th><th>Meal</th></tr></thead><tbody id="dl"></tbody></table></div>
+  <div class="hint">Payment approve হওয়ার পর থেকে paid দিন পর্যন্ত meal ON থাকে। দিন শেষ হলে বা payment না দিলে OFF।</div>
+ </section>
+
+ <section class="card">
+  <h2>🧾 Payment Proof জমা দিন</h2>
+  <div class="two">
+   <div><label>Reference নাম</label><input id="fName" placeholder="আপনার পুরো নাম"></div>
+   <div><label>Batch</label><input id="fBatch" placeholder="যেমন: 24th"></div>
+  </div>
+  <div class="two">
+   <div><label>Dept</label><input id="fDept" placeholder="যেমন: CSE"></div>
+   <div><label>MH-Room নং</label><input id="fRoom" placeholder="যেমন: MH-305"></div>
+  </div>
+  <div class="two">
+   <div><label>Method</label><select id="fMethod"><option>bKash</option><option>Nagad</option></select></div>
+   <div><label>Amount (৳)</label><input id="fAmt" type="number" inputmode="numeric" min="0"></div>
+  </div>
+  <div class="two">
+   <div><label>Sender নম্বর <small style="font-weight:400">(যেকোনো একটি দিলেই হবে)</small></label><input id="fFrom" inputmode="tel" placeholder="01XXXXXXXXX"></div>
+   <div><label>Transaction ID <small style="font-weight:400">(যেকোনো একটি)</small></label><input id="fTrx" placeholder="যেমন: 9A7B6C5D4E"></div>
+  </div>
+  <label>Note (ঐচ্ছিক)</label>
+  <textarea id="fNote" rows="2" placeholder="যেমন: November মাসের মিল, ২৫ দিন"></textarea>
+  <div class="hint" id="fHint"></div>
+  <button class="btn" style="margin-top:12px;width:100%" onclick="submitPay()">Payment জমা দিন</button>
+  <div class="msg" id="fMsg"></div>
+ </section>
+
+ <section class="card">
+  <h2>🔐 Login — আমার Meal Status</h2>
+  <div class="hint" style="margin:0 0 8px">যে bKash/Nagad নম্বর দিয়ে payment করেছেন সেই নম্বর অথবা Transaction ID দিয়ে Login করুন। শুধু আপনার নিজের তথ্য দেখানো হবে।</div>
+  <div style="display:flex;gap:8px"><input id="qIn" placeholder="01XXXXXXXXX বা Trx ID" onkeydown="if(event.key=='Enter')lookup()"><button class="btn" onclick="lookup()">Login</button><button class="btn o hide" id="outBtn" onclick="logout()">Logout</button></div>
+  <div id="qOut"></div>
+ </section>
+
+ <section class="card hide" id="admin">
+  <h2>🔐 Manager Panel</h2>
+  <div class="two">
+   <div><label>Manager নাম</label><input id="sName"></div>
+   <div><label>Manager ফোন</label><input id="sPhone"></div>
+  </div>
+  <div class="two">
+   <div><label>Term শুরুর তারিখ</label><input id="sStart" type="date"></div>
+   <div><label>Term কত দিন</label><input id="sDays" type="number" value="30"></div>
+  </div>
+  <div class="two">
+   <div><label>bKash নম্বর</label><input id="sBk"></div>
+   <div><label>Nagad নম্বর</label><input id="sNg"></div>
+  </div>
+  <div class="two">
+   <div><label>Minimum amount (৳)</label><input id="sMinA" type="number"></div>
+   <div><label>Minimum দিন</label><input id="sMinD" type="number"></div>
+  </div>
+  <label>প্রতি দিনের মিল রেট (৳, খাবারের বিল সহ)</label><input id="sRate" type="number">
+  <label>নতুন Manager Password (বদলাতে চাইলে, কমপক্ষে ৪ অক্ষর)</label><input id="sPw" type="password" autocomplete="new-password">
+  <button class="btn" style="margin-top:12px" onclick="saveSettings()">Settings সেভ</button>
+
+  <h2 style="margin-top:24px">📢 নতুন Notice</h2>
+  <input id="nTitle" placeholder="শিরোনাম">
+  <textarea id="nBody" rows="2" placeholder="বিস্তারিত" style="margin-top:8px"></textarea>
+  <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="nPin" style="width:auto"> জরুরি (লাল চিহ্ন)</label>
+  <button class="btn" style="margin-top:8px" onclick="addNotice()">Notice দিন</button>
+
+  <h2 style="margin-top:24px">💰 জমা হওয়া Payments <button class="btn o s" onclick="loadAdmin()">🔄 Refresh</button></h2>
+  <div class="tw"><table><thead><tr><th>নাম</th><th>Batch</th><th>Dept</th><th>রুম</th><th>Method</th><th>৳</th><th>Trx ID</th><th>নম্বর</th><th>Note</th><th>Status</th><th></th></tr></thead><tbody id="pays"></tbody></table></div>
+  <div class="hint" id="total"></div>
+ </section>
+</main>
+<footer>© Muktijoddha Hall Dining · Managed by hall dining manager</footer>
+
+<script src="config.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const DEF={name:'Manager নাম',phone:'',start:new Date().toISOString().slice(0,10),days:30,bkash:'01XXXXXXXXX',nagad:'01XXXXXXXXX',minAmt:1350,minDays:15,rate:90};
+let S={...DEF},N=[],P=[],MY=[],isAdmin=false,PW='';
+const norm=s=>String(s||'').replace(/[\s-]/g,'').replace(/^\+?88/,'').toLowerCase();
+async function api(action,data={}){
+  if(!window.API_URL||API_URL.includes('PASTE'))throw new Error('config.js এ API_URL বসানো হয়নি');
+  const r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,pw:PW,...data})});
+  const j=await r.json();if(j.error)throw new Error(j.error);return j;
+}
+async function loadPublic(){
+  try{const j=await api('public');S={...DEF,...j.settings};N=j.notices;render()}
+  catch(e){$('apiBar').textContent='⚠️ '+e.message;$('apiBar').classList.remove('hide')}
+}
+async function loadAdmin(){const j=await api('adminData');S={...DEF,...j.settings};N=j.notices;P=j.payments;render()}
+const day0=d=>{d=new Date(d);d.setHours(0,0,0,0);return d};
+function cover(list){
+  const ap=list.filter(p=>p.status=='approved'),rate=Number(S.rate)||1;
+  if(!ap.length)return{on:false,pd:0,left:0,end:null};
+  const pd=Math.floor(ap.reduce((a,p)=>a+Number(p.amount),0)/rate);
+  const first=Math.min(...ap.map(p=>p.at||p.ts)),t0=day0(S.start+'T00:00');
+  const start=day0(Math.max(t0,day0(first))),end=new Date(start);end.setDate(end.getDate()+pd-1);
+  const today=day0(new Date()),left=today<start?pd:Math.max(0,Math.round((end-today)/864e5)+1);
+  return{on:pd>0&&left>0,pd,left,end};
+}
+function render(){
+  const end=new Date(S.start+'T00:00');end.setDate(end.getDate()+Number(S.days||30));
+  const left=Math.max(0,Math.ceil((end-new Date())/864e5));
+  $('mName').textContent=S.name;$('mLeft').textContent=left;
+  $('mEnd').textContent=end.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  $('mPhone').textContent=S.phone?'📞 '+S.phone:'';
+  $('minAmt').textContent=S.minAmt;$('minDays').textContent=S.minDays;$('rate').textContent=S.rate;
+  $('nums').innerHTML=[['bKash','bk',S.bkash],['Nagad','ng',S.nagad]].map(([n,c,v])=>
+   `<div class="pay"><div><span class="tag ${c}">${n}</span><div class="n">${esc(v)}</div><small>Send Money করুন</small></div><button class="btn o s" onclick="copyNum('${esc(v)}',this)">Copy</button></div>`).join('');
+  $('fHint').textContent=`Minimum ৳${S.minAmt} (কমপক্ষে ${S.minDays} দিনের মিল) জমা দিতে হবে।`;
+  $('notices').innerHTML=N.length?N.map(n=>`<div class="notice ${n.pin?'p':''}"><b>${n.pin?'🔴 ':''}${esc(n.title)}</b>${esc(n.body)}<small>${new Date(n.ts).toLocaleDateString('en-GB')}</small>${isAdmin?` <button class="btn r s" onclick="delNotice('${n.id}')">মুছুন</button>`:''}</div>`).join(''):'<div class="hint">কোনো নোটিশ নেই।</div>';
+  if(isAdmin){
+    $('pays').innerHTML=P.map(p=>`<tr><td>${esc(p.name)}</td><td>${esc(p.batch)}</td><td>${esc(p.dept)}</td><td>${esc(p.room)}</td><td>${esc(p.method)}</td><td>${esc(p.amount)}</td><td>${esc(p.trx)}</td><td>${esc(p.from)}</td><td style="white-space:normal;min-width:120px">${esc(p.note)}</td><td><span class="pill ${p.status}">${p.status}</span></td><td>${p.status!='approved'?`<button class="btn s" onclick="setStatus('${p.id}','approved')">✓</button> `:''}${p.status!='rejected'?`<button class="btn r s" onclick="setStatus('${p.id}','rejected')">✕</button>`:''}</td></tr>`).join('')||'<tr><td colspan="11" class="hint">এখনো কোনো payment নেই</td></tr>';
+    const t=P.filter(p=>p.status=='approved').reduce((a,p)=>a+Number(p.amount),0);
+    $('total').textContent=`Approved মোট: ৳${t} · Pending: ${P.filter(p=>p.status=='pending').length}টি`;
+    renderList();
+  }
+}
+function renderList(){
+  const g={};P.forEach(p=>{const k=norm(p.name)+'|'+norm(p.room);(g[k]=g[k]||[]).push(p)});
+  let rows=Object.values(g).map(l=>{l.sort((a,b)=>b.ts-a.ts);return{m:l[0],c:cover(l),pend:l.some(p=>p.status=='pending')}});
+  rows.sort((a,b)=>b.c.on-a.c.on||a.m.name.localeCompare(b.m.name));
+  $('cOn').textContent=rows.filter(r=>r.c.on).length;$('cOff').textContent=rows.filter(r=>!r.c.on).length;$('cAll').textContent=rows.length;
+  const off=rows.filter(r=>!r.c.on&&r.c.pd>0&&!r.pend),soon=rows.filter(r=>r.c.on&&r.c.left<=2),nmr=a=>a.map(r=>esc(r.m.name)+' ('+esc(r.m.room)+')').join(', ');
+  $('warn').innerHTML=(off.length?`<div class="msg er" style="margin:0 0 10px"><b>⚠️ ${off.length} জনের Meal OFF — payment বাকি আছে</b><br>${nmr(off)}</div>`:'')+(soon.length?`<div class="bar" style="margin:0 0 10px"><b>⏰ ${soon.length} জনের meal ২ দিনের মধ্যে OFF হবে</b><br>${nmr(soon)}</div>`:'');
+  const q=($('lq')?.value||'').toLowerCase();
+  rows=rows.filter(r=>!q||[r.m.name,r.m.batch,r.m.dept,r.m.room].join(' ').toLowerCase().includes(q));
+  $('dl').innerHTML=rows.map(r=>`<tr><td>${esc(r.m.name)}</td><td>${esc(r.m.batch)}</td><td>${esc(r.m.dept)}</td><td>${esc(r.m.room)}</td><td>${r.c.pd}</td><td>${r.c.left}</td><td><span class="pill ${r.c.on?'approved':'rejected'}">${r.c.on?'ON':'OFF'}</span>${r.c.on?(r.c.left<=2?` <span class="pill pending">${r.c.left} দিন বাকি</span>`:''):(r.pend?' <span class="pill pending">verify হচ্ছে</span>':(r.c.pd?' <span class="pill rejected">⚠️ Payment বাকি</span>':''))}</td></tr>`).join('')||'<tr><td colspan="7" class="hint">এখনো কেউ নেই</td></tr>';
+}
+/* ---- student login (number / trx id) ---- */
+async function lookup(){
+  const q=$('qIn').value.trim(),o=$('qOut');if(!q){o.innerHTML='';return}
+  o.innerHTML='<div class="hint" style="margin-top:10px">খোঁজা হচ্ছে…</div>';
+  try{MY=(await api('lookup',{q})).payments}catch(e){o.innerHTML=`<div class="msg er">${esc(e.message)}</div>`;return}
+  if(!MY.length){o.innerHTML='<div class="msg er">এই নম্বর/Transaction ID দিয়ে কোনো payment পাওয়া যায়নি। আগে "Payment Proof জমা দিন" অংশে জমা দিন।</div>';return}
+  try{localStorage.setItem('zh_q',q)}catch{}
+  $('outBtn').classList.remove('hide');showMine();
+}
+function showMine(){
+  const all=MY,me=all[0],o=$('qOut'),rate=Number(S.rate)||1;
+  const sum=st=>all.filter(p=>p.status==st).reduce((a,p)=>a+Number(p.amount),0);
+  const pe=sum('pending'),cv=cover(all),ok=cv.on;
+  o.innerHTML=`<div class="card" style="margin-top:12px;background:var(--bg);box-shadow:none"><b>${esc(me.name)}</b><div class="hint">Batch ${esc(me.batch)} · ${esc(me.dept)} · ${esc(me.room)}</div>
+  <div class="stats" style="margin-top:10px"><div class="st"><b>${cv.pd}</b><span>দিনের payment (approved)</span></div><div class="st"><b style="color:${ok?'var(--ok)':'var(--er)'}">${ok?'ON':'OFF'}</b><span>Meal status</span></div><div class="st"><b>${cv.left}</b><span>দিন বাকি</span></div></div>
+  <div class="msg ${ok?'ok':'er'}" style="display:block">${ok?'✅ Meal ON আছে — '+cv.end.toLocaleDateString('en-GB',{day:'numeric',month:'short'})+' পর্যন্ত চলবে।'+(cv.left<=2?' ⏰ আর '+cv.left+' দিন পর OFF হবে — payment দিন।':''):(cv.pd?'⛔ Meal OFF — আপনার payment বাকি আছে। চালু করতে ৳'+S.rate+'/দিন হিসেবে payment দিন।':'⛔ Meal OFF — payment approve হয়নি।')}</div>
+  ${pe?`<div class="hint">⏳ ৳${pe} (~${Math.floor(pe/rate)} দিন) manager-এর approval-এর অপেক্ষায়।</div>`:''}
+  <div class="tw" style="margin-top:8px"><table><thead><tr><th>তারিখ</th><th>Method</th><th>৳</th><th>Status</th></tr></thead><tbody>${all.map(p=>`<tr><td>${new Date(p.ts).toLocaleDateString('en-GB')}</td><td>${esc(p.method)}</td><td>${esc(p.amount)}</td><td><span class="pill ${p.status}">${p.status}</span></td></tr>`).join('')}</tbody></table></div></div>`;
+}
+function logout(){try{localStorage.removeItem('zh_q')}catch{}MY=[];$('qIn').value='';$('qOut').innerHTML='';$('outBtn').classList.add('hide')}
+/* ---- payment submit ---- */
+async function submitPay(){
+  const m=$('fMsg'),g=id=>$(id).value.trim();
+  const o={name:g('fName'),batch:g('fBatch'),dept:g('fDept'),room:g('fRoom'),method:$('fMethod').value,amount:+g('fAmt'),from:g('fFrom'),trx:g('fTrx'),note:g('fNote')};
+  const err=!o.name||!o.batch||!o.dept||!o.room?'নাম, Batch, Dept ও MH-Room নং দিন।':o.amount<S.minAmt?`Minimum ৳${S.minAmt} দিতে হবে।`:(!o.trx&&!o.from)?'Transaction ID অথবা bKash/Nagad নম্বর দিন।':'';
+  if(err){m.className='msg er';m.textContent=err;return}
+  m.className='msg ok';m.textContent='জমা হচ্ছে…';
+  try{await api('submit',{p:o});m.textContent='✓ জমা হয়েছে! Manager যাচাই করে approve করবেন।';
+    $('qIn').value=o.trx||o.from;lookup();['fAmt','fFrom','fTrx','fNote'].forEach(i=>$(i).value='')}
+  catch(e){m.className='msg er';m.textContent=e.message}
+}
+/* ---- manager ---- */
+async function toggleAdmin(){
+  if(isAdmin){isAdmin=false;PW='';P=[]}
+  else{const p=prompt('Manager password দিন');if(!p)return;PW=p;
+    try{await loadAdmin();isAdmin=true}catch(e){PW='';alert(e.message);return}}
+  $('admin').classList.toggle('hide',!isAdmin);$('dlCard').classList.toggle('hide',!isAdmin);
+  $('adminBtn').textContent=isAdmin?'Manager Logout':'Manager Login';
+  if(isAdmin){fillAdmin();$('admin').scrollIntoView({behavior:'smooth'})}render();
+}
+function fillAdmin(){
+  $('sName').value=S.name;$('sPhone').value=S.phone;$('sStart').value=S.start;$('sDays').value=S.days;
+  $('sBk').value=S.bkash;$('sNg').value=S.nagad;$('sMinA').value=S.minAmt;$('sMinD').value=S.minDays;$('sRate').value=S.rate;
+}
+async function saveSettings(){
+  const o={name:$('sName').value.trim()||DEF.name,phone:$('sPhone').value.trim(),start:$('sStart').value||DEF.start,days:+$('sDays').value||30,
+   bkash:$('sBk').value.trim(),nagad:$('sNg').value.trim(),minAmt:+$('sMinA').value||0,minDays:+$('sMinD').value||0,rate:+$('sRate').value||0};
+  try{const np=$('sPw').value;await api('saveSettings',{settings:o,newPw:np});if(np&&np.length>=4)PW=np;$('sPw').value='';S=o;render();alert('Settings সেভ হয়েছে ✓')}catch(e){alert(e.message)}
+}
+async function addNotice(){
+  const t=$('nTitle').value.trim();if(!t)return;
+  try{await api('addNotice',{title:t,body:$('nBody').value.trim(),pin:$('nPin').checked});$('nTitle').value=$('nBody').value='';$('nPin').checked=false;await loadAdmin()}catch(e){alert(e.message)}
+}
+async function delNotice(id){try{await api('delNotice',{id});await loadAdmin()}catch(e){alert(e.message)}}
+async function setStatus(id,st){try{await api('setStatus',{id,status:st});await loadAdmin()}catch(e){alert(e.message)}}
+function copyNum(v,b){try{navigator.clipboard.writeText(v)}catch{}b.textContent='Copied ✓';setTimeout(()=>b.textContent='Copy',1500)}
+(async()=>{
+  await loadPublic();
+  try{const q0=localStorage.getItem('zh_q');if(q0){$('qIn').value=q0;lookup()}}catch{}
+})();
+</script>
+</body>
+</html>
